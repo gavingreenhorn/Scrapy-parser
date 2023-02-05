@@ -10,7 +10,7 @@ class PepSpider(scrapy.Spider):
 
     def parse(self, response):
         for row in response.css('table tr'):
-            url = row.css('a::attr(href)').get():
+            url = row.css('a::attr(href)').get()
             if not url:
                 continue
             yield response.follow(
