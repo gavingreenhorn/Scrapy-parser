@@ -2,11 +2,13 @@ import scrapy
 
 from ..items import PepParseItem
 
+PEP_BASE_PATH = 'peps.python.org'
+
 
 class PepSpider(scrapy.Spider):
     name = 'pep'
-    allowed_domains = ['peps.python.org']
-    start_urls = ['https://peps.python.org/']
+    allowed_domains = [PEP_BASE_PATH]
+    start_urls = [f'https://{PEP_BASE_PATH}/']
 
     def parse(self, response):
         for row in response.css('table tr'):
