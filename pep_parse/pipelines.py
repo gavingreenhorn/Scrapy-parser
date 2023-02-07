@@ -20,13 +20,16 @@ class PepParsePipeline:
         return item
 
     def close_spider(self, spider):
+        self.status_counter['Total'] = sum(
+            self.status_counter.values())
         file_name = STATUS_SUMMARY_NAME.format(now=datetime.utcnow())
         with open(
             BASE_DIR / RESULTS_DIR_NAME / file_name,
             mode='w',
             encoding='utf-8'
         ) as file:
-            writer = csv.writer(file)
-            writer.writerow(CSV_HEADERS)
-            writer.writerows(self.status_counter.items())
-            writer.writerow(('Total', str(sum(self.status_counter.values()))))
+            writer = csv.writer(
+                file,
+                dialect=csv.unix_dialect,
+                quoting=csv.QUOTE_MINIMAL)
+            writer.writerows([CSV_HEADERS, *self.status_counter.items()])

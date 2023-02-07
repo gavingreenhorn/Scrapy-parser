@@ -1,6 +1,8 @@
 import scrapy
+from pathlib import Path
 
 from ..items import PepParseItem
+from ..settings import RESULTS_DIR_NAME
 
 PEP_BASE_PATH = 'peps.python.org'
 
@@ -9,6 +11,11 @@ class PepSpider(scrapy.Spider):
     name = 'pep'
     allowed_domains = [PEP_BASE_PATH]
     start_urls = [f'https://{PEP_BASE_PATH}/']
+
+    def __init__(self, name=None, **kwargs):
+        (Path(__name__).absolute().parent.parent / RESULTS_DIR_NAME).mkdir(
+            exist_ok=True)
+        super().__init__(name, **kwargs)
 
     def parse(self, response):
         for row in response.css('table tr'):
